@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.bunny.net/css?family=orbitron:wght@400;900|inter:wght@400;700" rel="stylesheet" />
+<title>Dateinamen Cleaner</title>
+
+<style>
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0e0e0f;
+    --surface: #17181a;
+    --surface2: #1f2023;
+    --border: #2e2f33;
+    --accent: #c8f560;
+    --accent2: #7efff4;
+    --text: #e8e8e2;
+    --muted: #6b6b72;
+    --danger: #ff6b6b;
+    --success: #c8f560;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    padding: 2rem 1rem 4rem;
+  }
+
+  header {
+    max-width: 780px;
+    margin: 0 auto 2.5rem;
+    display: flex;
+    align-items: flex-end;
+    gap: 1.5rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1.5rem;
+  }
+
+  .logo-mark {
+    width: 48px;
+    height: 48px;
+    background: var(--accent);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .logo-mark svg { width: 26px; height: 26px; }
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+
+  h1 span { color: var(--accent); }
+
+  .subtitle {
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    margin-top: 4px;
+  }
+
+  .main { max-width: 780px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.25rem; }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.5rem;
+  }
+
+  .card-label {
+    font-size: 0.7rem;
+    font-family: 'Space Mono', monospace;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  /* Pattern section */
+  .pattern-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 0.75rem;
+  }
+
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--text);
+    transition: border-color 0.15s;
+  }
+
+  .tag:hover { border-color: var(--muted); }
+
+  .tag button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    transition: color 0.15s;
+  }
+
+  .tag button:hover { color: var(--danger); }
+
+  .add-pattern {
+    display: flex;
+    gap: 8px;
+    margin-top: 0.5rem;
+  }
+
+  .add-pattern input {
+    flex: 1;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.82rem;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .add-pattern input:focus { border-color: var(--accent); }
+  .add-pattern input::placeholder { color: var(--muted); }
+
+  .btn {
+    background: var(--accent);
+    color: #0e0e0f;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+    white-space: nowrap;
+  }
+
+  .btn:hover { opacity: 0.88; }
+  .btn:active { transform: scale(0.97); }
+  .btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+  .btn-secondary {
+    background: var(--surface2);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); opacity: 1; }
+
+  /* Drop zone */
+  .dropzone {
+    border: 1.5px dashed var(--border);
+    border-radius: 12px;
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    position: relative;
+  }
+
+  .dropzone:hover, .dropzone.dragover {
+    border-color: var(--accent);
+    background: rgba(200, 245, 96, 0.04);
+  }
+
+  .dropzone input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+  }
+
+  .drop-icon {
+    width: 44px;
+    height: 44px;
+    margin: 0 auto 0.75rem;
+    background: var(--surface2);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .drop-icon svg { width: 22px; height: 22px; stroke: var(--accent); }
+
+  .drop-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .drop-sub {
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+  }
+
+  .drop-buttons {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 1rem;
+  }
+
+  /* File list */
+  .file-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 360px;
+    overflow-y: auto;
+    padding-right: 4px;
+  }
+
+  .file-list::-webkit-scrollbar { width: 4px; }
+  .file-list::-webkit-scrollbar-track { background: transparent; }
+  .file-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  .file-item {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 0.78rem;
+    font-family: 'Space Mono', monospace;
+    transition: border-color 0.15s;
+  }
+
+  .file-item:hover { border-color: var(--border); }
+
+  .file-old {
+    color: var(--muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .file-arrow {
+    color: var(--accent);
+    flex-shrink: 0;
+    font-size: 0.9rem;
+  }
+
+  .file-new {
+    color: var(--text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .file-new.changed { color: var(--accent2); }
+  .file-new.unchanged { color: var(--muted); font-style: italic; }
+
+  .remove-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--muted);
+    padding: 2px 4px;
+    font-size: 1rem;
+    line-height: 1;
+    border-radius: 4px;
+    transition: color 0.15s, background 0.15s;
+    flex-shrink: 0;
+  }
+
+  .remove-btn:hover { color: var(--danger); background: rgba(255,107,107,0.1); }
+
+  /* Stats */
+  .stats-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 1rem;
+  }
+
+  .stat {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 16px;
+    flex: 1;
+  }
+
+  .stat-val {
+    font-size: 1.5rem;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 2px;
+  }
+
+  .stat-val.green { color: var(--accent); }
+  .stat-val.cyan { color: var(--accent2); }
+
+  .stat-label {
+    font-size: 0.7rem;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* Bottom bar */
+  .bottom-bar {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .case-sensitive-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.78rem;
+    color: var(--muted);
+    cursor: pointer;
+    user-select: none;
+    font-family: 'Space Mono', monospace;
+  }
+
+  .toggle-switch {
+    width: 32px;
+    height: 18px;
+    background: var(--border);
+    border-radius: 9px;
+    position: relative;
+    transition: background 0.2s;
+    flex-shrink: 0;
+  }
+
+  .toggle-switch.on { background: var(--accent); }
+
+  .toggle-switch::after {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: white;
+    border-radius: 50%;
+    top: 3px;
+    left: 3px;
+    transition: transform 0.2s;
+  }
+
+  .toggle-switch.on::after { transform: translateX(14px); }
+
+  .empty-state {
+    text-align: center;
+    padding: 2rem;
+    color: var(--muted);
+    font-size: 0.82rem;
+    font-family: 'Space Mono', monospace;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-mark">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#0e0e0f" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+      <polyline points="14,2 14,8 20,8"/>
+      <line x1="9" y1="12" x2="15" y2="12"/>
+      <line x1="9" y1="16" x2="13" y2="16"/>
+    </svg>
+  </div>
+  <div>
+    <h1>Datei<span>Cleaner</span></h1>
+    <div class="subtitle">// entfernt unerwünschte patterns aus dateinamen</div>
+  </div>
+</header>
+
+<div class="main">
+
+  <!-- Pattern Config -->
+  <div class="card">
+    <div class="card-label">01 — Zu entfernende Muster</div>
+    <div class="pattern-row" id="tagContainer"></div>
+    <div class="add-pattern">
+      <input type="text" id="patternInput" placeholder="z.B. Spotisaver, [Downloaded], (HD)…" />
+      <button class="btn" onclick="addPattern()">+ Hinzufügen</button>
+    </div>
+    <div style="margin-top: 1rem; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+      <label class="case-sensitive-toggle" onclick="toggleCase()">
+        <div class="toggle-switch" id="caseToggle"></div>
+        Groß-/Kleinschreibung beachten
+      </label>
+    </div>
+  </div>
+
+  <!-- Upload -->
+  <div class="card">
+    <div class="card-label">02 — Dateien hochladen</div>
+    <div class="dropzone" id="dropzone"
+      ondragover="dragOver(event)"
+      ondragleave="dragLeave(event)"
+      ondrop="handleDrop(event)">
+      <input type="file" id="fileInput" multiple onchange="handleFiles(this.files)" />
+      <div class="drop-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="16,16 12,12 8,16"/>
+          <line x1="12" y1="12" x2="12" y2="21"/>
+          <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/>
+        </svg>
+      </div>
+      <div class="drop-title">Dateien hierher ziehen</div>
+      <div class="drop-sub">oder per Klick auswählen</div>
+      <div class="drop-buttons" onclick="event.stopPropagation()">
+        <button class="btn btn-secondary" onclick="document.getElementById('fileInput').click()">📄 Dateien wählen</button>
+        <button class="btn btn-secondary" onclick="document.getElementById('folderInput').click()">📁 Ordner wählen</button>
+      </div>
+    </div>
+    <input type="file" id="folderInput" webkitdirectory multiple style="display:none" onchange="handleFiles(this.files)" />
+  </div>
+
+  <!-- Preview -->
+  <div class="card" id="previewCard" style="display:none">
+    <div class="card-label">03 — Vorschau & Ergebnis</div>
+    <div class="stats-row">
+      <div class="stat">
+        <div class="stat-val green" id="statTotal">0</div>
+        <div class="stat-label">Dateien gesamt</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val cyan" id="statChanged">0</div>
+        <div class="stat-label">Umbenennt</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val" id="statUnchanged" style="color: var(--muted)">0</div>
+        <div class="stat-label">Unverändert</div>
+      </div>
+    </div>
+
+    <div class="file-list" id="fileList"></div>
+
+    <div class="bottom-bar" style="margin-top: 1rem;">
+      <button class="btn" id="downloadBtn" onclick="downloadZip()">
+        ⬇ Als ZIP herunterladen
+      </button>
+      <button class="btn btn-secondary" onclick="clearAll()">Leeren</button>
+      <span style="font-size: 0.72rem; color: var(--muted); font-family: 'Space Mono', monospace; margin-left: auto;">
+        Alle Daten bleiben lokal im Browser
+      </span>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+  let caseSensitive = false;
+  let files = [];
+  let patterns = [];
+
+  const patternInput = document.getElementById('patternInput');
+  patternInput.addEventListener('keydown', e => { if (e.key === 'Enter') addPattern(); });
+
+  function addPattern() {
+    const val = patternInput.value.trim();
+    if (!val || patterns.includes(val)) return;
+    patterns.push(val);
+    patternInput.value = '';
+    renderTags();
+    updatePreview();
+  }
+
+  function removePattern(p) {
+    patterns = patterns.filter(x => x !== p);
+    renderTags();
+    updatePreview();
+  }
+
+  function renderTags() {
+    const c = document.getElementById('tagContainer');
+    c.innerHTML = patterns.map(p =>
+      `<span class="tag">
+        <span>${escHtml(p)}</span>
+        <button onclick="removePattern('${escHtml(p).replace(/'/g,"\\'")}')">×</button>
+      </span>`
+    ).join('');
+  }
+
+  function toggleCase() {
+    caseSensitive = !caseSensitive;
+    document.getElementById('caseToggle').classList.toggle('on', caseSensitive);
+    updatePreview();
+  }
+
+  function escHtml(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function cleanName(name) {
+    let cleaned = name;
+    for (const p of patterns) {
+      const flags = caseSensitive ? 'g' : 'gi';
+      const re = new RegExp(escapeRegex(p), flags);
+      cleaned = cleaned.replace(re, '');
+    }
+    cleaned = cleaned
+      .replace(/\s{2,}/g, ' ')
+      .replace(/^[\s\-_.]+|[\s\-_.]+(?=\.[^.]+$|$)/g, '')
+      .replace(/\(\s*\)/g, '')
+      .replace(/\[\s*\]/g, '')
+      .trim();
+    return cleaned || name;
+  }
+
+  function escapeRegex(s) {
+    return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
+  function dragOver(e) {
+    e.preventDefault();
+    document.getElementById('dropzone').classList.add('dragover');
+  }
+
+  function dragLeave() {
+    document.getElementById('dropzone').classList.remove('dragover');
+  }
+
+  function handleDrop(e) {
+    e.preventDefault();
+    document.getElementById('dropzone').classList.remove('dragover');
+    const items = e.dataTransfer.items;
+    if (items) {
+      const newFiles = [];
+      for (const item of items) {
+        if (item.kind === 'file') {
+          newFiles.push(item.getAsFile());
+        }
+      }
+      addFiles(newFiles);
+    } else {
+      addFiles(Array.from(e.dataTransfer.files));
+    }
+  }
+
+  function handleFiles(fileList) {
+    addFiles(Array.from(fileList));
+  }
+
+  function addFiles(newFiles) {
+    for (const f of newFiles) {
+      if (!files.find(x => x.name === f.name && x.size === f.size)) {
+        files.push(f);
+      }
+    }
+    updatePreview();
+  }
+
+  function removeFile(idx) {
+    files.splice(idx, 1);
+    updatePreview();
+  }
+
+  function clearAll() {
+    files = [];
+    updatePreview();
+  }
+
+  function updatePreview() {
+    const card = document.getElementById('previewCard');
+    const list = document.getElementById('fileList');
+
+    if (files.length === 0) {
+      card.style.display = 'none';
+      return;
+    }
+
+    card.style.display = 'block';
+
+    let changed = 0;
+    const rows = files.map((f, i) => {
+      const newName = cleanName(f.name);
+      const isChanged = newName !== f.name;
+      if (isChanged) changed++;
+      return `
+        <div class="file-item">
+          <span class="file-old" title="${escHtml(f.name)}">${escHtml(f.name)}</span>
+          <span class="file-arrow">→</span>
+          <span class="file-new ${isChanged ? 'changed' : 'unchanged'}" title="${escHtml(newName)}">${escHtml(newName)}</span>
+          <button class="remove-btn" onclick="removeFile(${i})" title="Entfernen">×</button>
+        </div>`;
+    });
+
+    list.innerHTML = rows.join('');
+    document.getElementById('statTotal').textContent = files.length;
+    document.getElementById('statChanged').textContent = changed;
+    document.getElementById('statUnchanged').textContent = files.length - changed;
+  }
+
+  async function downloadZip() {
+    if (files.length === 0) return;
+    const btn = document.getElementById('downloadBtn');
+    btn.disabled = true;
+    btn.textContent = '⏳ Wird erstellt…';
+
+    try {
+      const zip = new JSZip();
+      for (const f of files) {
+        const newName = cleanName(f.name);
+        const data = await f.arrayBuffer();
+        zip.file(newName, data);
+      }
+      const blob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE', compressionOptions: { level: 6 } });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'dateien-bereinigt.zip';
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch(e) {
+      alert('Fehler beim Erstellen der ZIP-Datei: ' + e.message);
+    }
+
+    btn.disabled = false;
+    btn.textContent = '⬇ Als ZIP herunterladen';
+  }
+
+  renderTags();
+</script>
+
+</body>
+</html>
