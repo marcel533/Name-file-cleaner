@@ -21,6 +21,6 @@ Ein kleines Browser-Tool, das unerwünschte Textmuster (z. B. `Spotisaver`, `[Do
 - Nutzt [JSZip](https://stuk.github.io/jszip/) (via CDN) zum Erstellen der ZIP-Datei im Browser.
 - Alle Daten bleiben lokal im Browser (`ArrayBuffer`-Verarbeitung, kein Netzwerk-Upload).
 
-## Bekannte Einschränkung
+## Hinweis
 
 Dieses README sowie das CSS des Tools wurden vollständig mit KI generiert.
