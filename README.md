@@ -1,4 +1,4 @@
-# DateiCleaner
+8# DateiCleaner
 
 Ein kleines Browser-Tool, das unerwünschte Textmuster (z. B. `Spotisaver`, `[Downloaded]`, `(HD)`) aus Dateinamen entfernt und die bereinigten Dateien als ZIP zum Download anbietet. Läuft komplett lokal im Browser – es werden keine Dateien hochgeladen oder irgendwohin gesendet.
 
@@ -24,3 +24,6 @@ Ein kleines Browser-Tool, das unerwünschte Textmuster (z. B. `Spotisaver`, `[Do
 ## Hinweis
 
 Dieses README sowie das CSS des Tools wurden vollständig mit KI generiert.
+
+--
+URL: https://marcel533.github.io/Name-file-cleaner/
