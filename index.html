@@ -70,6 +70,29 @@
     margin-top: 4px;
   }
 
+  .header-spacer { flex: 1; }
+
+  .lang-switch {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.72rem;
+    font-family: 'Space Mono', monospace;
+    color: var(--muted);
+    cursor: pointer;
+    user-select: none;
+    padding-bottom: 4px;
+  }
+
+  .lang-switch .lang-label {
+    transition: color 0.15s;
+  }
+
+  .lang-switch .lang-label.active {
+    color: var(--accent);
+    font-weight: 700;
+  }
+
   .main { max-width: 780px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.25rem; }
 
   .card {
@@ -382,9 +405,122 @@
     font-size: 0.82rem;
     font-family: 'Space Mono', monospace;
   }
+
+  /* Footer */
+  footer {
+    max-width: 780px;
+    margin: 2rem auto 0;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    align-items: center;
+    font-size: 0.75rem;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+  }
+
+  footer a, footer button.link-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--muted);
+    text-decoration: none;
+    cursor: pointer;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    transition: color 0.15s;
+  }
+
+  footer a:hover, footer button.link-btn:hover { color: var(--accent); }
+
+  /* Modal */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.65);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1rem;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.75rem;
+    max-width: 640px;
+    width: 100%;
+    max-height: 82vh;
+    overflow-y: auto;
+    position: relative;
+  }
+
+  .modal::-webkit-scrollbar { width: 4px; }
+  .modal::-webkit-scrollbar-track { background: transparent; }
+  .modal::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  .modal h2 {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--accent);
+    margin-bottom: 1.1rem;
+    padding-right: 1.5rem;
+  }
+
+  .modal h3 {
+    font-size: 0.85rem;
+    font-family: 'Space Mono', monospace;
+    color: var(--accent2);
+    letter-spacing: 0.04em;
+    margin: 1.1rem 0 0.4rem;
+  }
+
+  .modal p {
+    font-size: 0.85rem;
+    line-height: 1.55;
+    color: var(--text);
+    margin-bottom: 0.6rem;
+  }
+
+  .modal ul {
+    margin: 0 0 0.6rem 1.1rem;
+  }
+
+  .modal li {
+    font-size: 0.85rem;
+    line-height: 1.55;
+    color: var(--text);
+    margin-bottom: 0.3rem;
+  }
+
+  .modal a { color: var(--accent2); }
+
+  .modal-close {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: color 0.15s;
+  }
+
+  .modal-close:hover { color: var(--danger); }
+
+  body.lang-de [data-lang="en"] { display: none; }
+  body.lang-en [data-lang="de"] { display: none; }
 </style>
 </head>
-<body>
+<body class="lang-de">
 
 <header>
   <div class="logo-mark">
@@ -397,7 +533,16 @@
   </div>
   <div>
     <h1>Datei<span>Cleaner</span></h1>
-    <div class="subtitle">// entfernt unerwünschte patterns aus dateinamen</div>
+    <div class="subtitle">
+      <span data-lang="de">// entfernt unerwünschte patterns aus dateinamen</span>
+      <span data-lang="en">// removes unwanted patterns from filenames</span>
+    </div>
+  </div>
+  <div class="header-spacer"></div>
+  <div class="lang-switch" onclick="toggleLang()">
+    <span class="lang-label" id="langLabelDe">DE</span>
+    <div class="toggle-switch" id="langToggle"></div>
+    <span class="lang-label" id="langLabelEn">EN</span>
   </div>
 </header>
 
@@ -405,23 +550,36 @@
 
   <!-- Pattern Config -->
   <div class="card">
-    <div class="card-label">01 — Zu entfernende Muster</div>
+    <div class="card-label">
+      <span data-lang="de">01 — Zu entfernende Muster</span>
+      <span data-lang="en">01 — Patterns to remove</span>
+    </div>
     <div class="pattern-row" id="tagContainer"></div>
     <div class="add-pattern">
-      <input type="text" id="patternInput" placeholder="z.B. Spotisaver, [Downloaded], (HD)…" />
-      <button class="btn" onclick="addPattern()">+ Hinzufügen</button>
+      <input type="text" id="patternInput"
+        data-placeholder-de="z.B. Spotisaver, [Downloaded], (HD)…"
+        data-placeholder-en="e.g. Spotisaver, [Downloaded], (HD)…"
+        placeholder="z.B. Spotisaver, [Downloaded], (HD)…" />
+      <button class="btn" onclick="addPattern()">
+        <span data-lang="de">+ Hinzufügen</span>
+        <span data-lang="en">+ Add</span>
+      </button>
     </div>
     <div style="margin-top: 1rem; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
       <label class="case-sensitive-toggle" onclick="toggleCase()">
         <div class="toggle-switch" id="caseToggle"></div>
-        Groß-/Kleinschreibung beachten
+        <span data-lang="de">Groß-/Kleinschreibung beachten</span>
+        <span data-lang="en">Case sensitive</span>
       </label>
     </div>
   </div>
 
   <!-- Upload -->
   <div class="card">
-    <div class="card-label">02 — Dateien hochladen</div>
+    <div class="card-label">
+      <span data-lang="de">02 — Dateien hochladen</span>
+      <span data-lang="en">02 — Upload files</span>
+    </div>
     <div class="dropzone" id="dropzone"
       ondragover="dragOver(event)"
       ondragleave="dragLeave(event)"
@@ -434,11 +592,21 @@
           <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/>
         </svg>
       </div>
-      <div class="drop-title">Dateien hierher ziehen</div>
-      <div class="drop-sub">oder per Klick auswählen</div>
+      <div class="drop-title">
+        <span data-lang="de">Dateien hierher ziehen</span>
+        <span data-lang="en">Drag files here</span>
+      </div>
+      <div class="drop-sub">
+        <span data-lang="de">oder per Klick auswählen</span>
+        <span data-lang="en">or click to select</span>
+      </div>
       <div class="drop-buttons" onclick="event.stopPropagation()">
-        <button class="btn btn-secondary" onclick="document.getElementById('fileInput').click()">📄 Dateien wählen</button>
-        <button class="btn btn-secondary" onclick="document.getElementById('folderInput').click()">📁 Ordner wählen</button>
+        <button class="btn btn-secondary" onclick="document.getElementById('fileInput').click()">
+          📄 <span data-lang="de">Dateien wählen</span><span data-lang="en">Choose files</span>
+        </button>
+        <button class="btn btn-secondary" onclick="document.getElementById('folderInput').click()">
+          📁 <span data-lang="de">Ordner wählen</span><span data-lang="en">Choose folder</span>
+        </button>
       </div>
     </div>
     <input type="file" id="folderInput" webkitdirectory multiple style="display:none" onchange="handleFiles(this.files)" />
@@ -446,19 +614,31 @@
 
   <!-- Preview -->
   <div class="card" id="previewCard" style="display:none">
-    <div class="card-label">03 — Vorschau & Ergebnis</div>
+    <div class="card-label">
+      <span data-lang="de">03 — Vorschau &amp; Ergebnis</span>
+      <span data-lang="en">03 — Preview &amp; result</span>
+    </div>
     <div class="stats-row">
       <div class="stat">
         <div class="stat-val green" id="statTotal">0</div>
-        <div class="stat-label">Dateien gesamt</div>
+        <div class="stat-label">
+          <span data-lang="de">Dateien gesamt</span>
+          <span data-lang="en">Total files</span>
+        </div>
       </div>
       <div class="stat">
         <div class="stat-val cyan" id="statChanged">0</div>
-        <div class="stat-label">Umbenennt</div>
+        <div class="stat-label">
+          <span data-lang="de">Umbenennt</span>
+          <span data-lang="en">Renamed</span>
+        </div>
       </div>
       <div class="stat">
         <div class="stat-val" id="statUnchanged" style="color: var(--muted)">0</div>
-        <div class="stat-label">Unverändert</div>
+        <div class="stat-label">
+          <span data-lang="de">Unverändert</span>
+          <span data-lang="en">Unchanged</span>
+        </div>
       </div>
     </div>
 
@@ -466,15 +646,182 @@
 
     <div class="bottom-bar" style="margin-top: 1rem;">
       <button class="btn" id="downloadBtn" onclick="downloadZip()">
-        ⬇ Als ZIP herunterladen
+        ⬇ <span data-lang="de">Als ZIP herunterladen</span><span data-lang="en">Download as ZIP</span>
       </button>
-      <button class="btn btn-secondary" onclick="clearAll()">Leeren</button>
+      <button class="btn btn-secondary" onclick="clearAll()">
+        <span data-lang="de">Leeren</span>
+        <span data-lang="en">Clear</span>
+      </button>
       <span style="font-size: 0.72rem; color: var(--muted); font-family: 'Space Mono', monospace; margin-left: auto;">
-        Alle Daten bleiben lokal im Browser
+        <span data-lang="de">Alle Daten bleiben lokal im Browser</span>
+        <span data-lang="en">All data stays local in your browser</span>
       </span>
     </div>
   </div>
 
+</div>
+
+<footer>
+  <button class="link-btn" onclick="openModal('impressumModal')">
+    <span data-lang="de">Impressum</span>
+    <span data-lang="en">Legal Notice</span>
+  </button>
+  <button class="link-btn" onclick="openModal('termsModal')">
+    <span data-lang="de">Nutzungsbedingungen</span>
+    <span data-lang="en">Terms of Service</span>
+  </button>
+  <a href="mailto:marcel.worgotter@proton.me">marcel.worgotter@proton.me</a>
+  <a href="https://discord.gg/5RqSyuZbDq" target="_blank" rel="noopener">Discord</a>
+</footer>
+
+<!-- Impressum Modal -->
+<div class="modal-overlay" id="impressumModal" onclick="closeModalOnOverlay(event, 'impressumModal')">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('impressumModal')">&times;</button>
+
+    <div data-lang="de">
+      <h2>Impressum</h2>
+      <p>Angaben gemäß § 5 TMG</p>
+
+      <h3>Verantwortlich für den Inhalt</h3>
+      <p>Marcel</p>
+
+      <h3>Kontakt</h3>
+      <p>E-Mail: <a href="mailto:marcel.worgotter@proton.me">marcel.worgotter@proton.me</a><br>
+      Discord: <a href="https://discord.gg/5RqSyuZbDq" target="_blank" rel="noopener">discord.gg/5RqSyuZbDq</a></p>
+
+      <p><strong>Hinweis:</strong> Für ein rechtsgültiges Impressum nach § 5 TMG sind zusätzlich folgende Angaben erforderlich, die hier noch ergänzt werden müssen:</p>
+      <ul>
+        <li>Vollständige ladungsfähige Anschrift (Straße, Hausnummer, PLZ, Ort, Land)</li>
+        <li>Bei gewerblicher Nutzung ggf. Handelsregistereintrag, USt-IdNr. und vertretungsberechtigte Person</li>
+      </ul>
+
+      <h3>Haftungsausschluss</h3>
+      <p><strong>Haftung für Inhalte</strong><br>
+      Die Inhalte dieses Tools wurden mit größtmöglicher Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte kann jedoch keine Gewähr übernommen werden.</p>
+
+      <p><strong>Haftung für Links</strong><br>
+      Sofern auf externe Links (z. B. Discord) verwiesen wird, wurde bei der erstmaligen Verknüpfung der fremde Inhalt geprüft. Auf die aktuelle und zukünftige Gestaltung verlinkter Seiten hat der Betreiber jedoch keinen Einfluss und übernimmt hierfür keine Haftung.</p>
+
+      <p><strong>Datenverarbeitung</strong><br>
+      DateiCleaner verarbeitet hochgeladene Dateien ausschließlich lokal im Browser des Nutzers. Es findet kein Upload an einen Server statt, und es werden keine personenbezogenen Daten durch das Tool selbst gespeichert oder übertragen.</p>
+    </div>
+
+    <div data-lang="en">
+      <h2>Legal Notice</h2>
+      <p>Information according to § 5 TMG (German Telemedia Act)</p>
+
+      <h3>Responsible for content</h3>
+      <p>Marcel</p>
+
+      <h3>Contact</h3>
+      <p>Email: <a href="mailto:marcel.worgotter@proton.me">marcel.worgotter@proton.me</a><br>
+      Discord: <a href="https://discord.gg/5RqSyuZbDq" target="_blank" rel="noopener">discord.gg/5RqSyuZbDq</a></p>
+
+      <p><strong>Note:</strong> For a legally valid legal notice under § 5 TMG, the following additional information is still required and needs to be added here:</p>
+      <ul>
+        <li>Full postal address (street, house number, postal code, city, country)</li>
+        <li>For commercial use, if applicable: commercial register entry, VAT ID, and the person authorized to represent the business</li>
+      </ul>
+
+      <h3>Disclaimer</h3>
+      <p><strong>Liability for content</strong><br>
+      The content of this tool has been created with the greatest possible care. However, no guarantee can be given for the accuracy, completeness, or timeliness of the content.</p>
+
+      <p><strong>Liability for links</strong><br>
+      Insofar as reference is made to external links (e.g. Discord), the external content was checked at the time the link was first created. The operator has no influence on the current or future design of linked pages and assumes no liability for them.</p>
+
+      <p><strong>Data processing</strong><br>
+      DateiCleaner processes uploaded files exclusively locally in the user's browser. No upload to a server takes place, and no personal data is stored or transmitted by the tool itself.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Terms of Service Modal -->
+<div class="modal-overlay" id="termsModal" onclick="closeModalOnOverlay(event, 'termsModal')">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('termsModal')">&times;</button>
+
+    <div data-lang="de">
+      <h2>Nutzungsbedingungen</h2>
+      <p>Stand: August 2026</p>
+
+      <h3>1. Geltungsbereich</h3>
+      <p>Diese Nutzungsbedingungen gelten für die Nutzung des Tools „DateiCleaner" (im Folgenden „das Tool"). Mit der Nutzung des Tools erklärst du dich mit diesen Bedingungen einverstanden.</p>
+
+      <h3>2. Leistungsbeschreibung</h3>
+      <p>DateiCleaner ist ein browserbasiertes Werkzeug zum Entfernen von unerwünschten Textmustern aus Dateinamen. Alle Verarbeitungsschritte (Umbenennung, ZIP-Erstellung) laufen ausschließlich lokal im Browser des Nutzers ab. Es findet kein Upload von Dateien an einen Server statt.</p>
+
+      <h3>3. Kostenlose Nutzung</h3>
+      <p>Das Tool wird kostenlos zur Verfügung gestellt. Es besteht kein Anspruch auf ständige Verfügbarkeit, Fehlerfreiheit oder Weiterentwicklung.</p>
+
+      <h3>4. Nutzungsvoraussetzungen</h3>
+      <p>Die Nutzung erfolgt auf eigene Verantwortung. Der Nutzer ist selbst dafür verantwortlich, dass die von ihm verarbeiteten Dateien keine Rechte Dritter verletzen und er zur Bearbeitung dieser Dateien berechtigt ist.</p>
+
+      <h3>5. Haftungsausschluss</h3>
+      <p>Die Nutzung des Tools erfolgt auf eigenes Risiko. Es wird keine Haftung übernommen für:</p>
+      <ul>
+        <li>Datenverlust oder Beschädigung von Dateien während der Verarbeitung</li>
+        <li>Fehlerhafte oder unvollständige Umbenennungen</li>
+        <li>Schäden, die durch die Nutzung oder Nichtverfügbarkeit des Tools entstehen</li>
+      </ul>
+      <p>Dies gilt nicht bei Vorsatz oder grober Fahrlässigkeit.</p>
+
+      <h3>6. Keine Datenspeicherung</h3>
+      <p>Da die Verarbeitung vollständig client-seitig im Browser stattfindet, werden keine hochgeladenen Dateien oder deren Inhalte durch den Betreiber gespeichert, eingesehen oder weitergegeben.</p>
+
+      <h3>7. Änderungen</h3>
+      <p>Der Betreiber behält sich vor, diese Nutzungsbedingungen sowie das Tool selbst jederzeit ohne Vorankündigung zu ändern.</p>
+
+      <h3>8. Kontakt</h3>
+      <p>Bei Fragen zu diesen Nutzungsbedingungen:<br>
+      E-Mail: <a href="mailto:marcel.worgotter@proton.me">marcel.worgotter@proton.me</a><br>
+      Discord: <a href="https://discord.gg/5RqSyuZbDq" target="_blank" rel="noopener">discord.gg/5RqSyuZbDq</a></p>
+
+      <h3>9. Anwendbares Recht</h3>
+      <p>Es gilt deutsches Recht, soweit keine zwingenden gesetzlichen Verbraucherschutzvorschriften des Wohnsitzstaates des Nutzers entgegenstehen.</p>
+    </div>
+
+    <div data-lang="en">
+      <h2>Terms of Service</h2>
+      <p>Last updated: August 2026</p>
+
+      <h3>1. Scope</h3>
+      <p>These Terms of Service apply to the use of the "DateiCleaner" tool (hereinafter "the tool"). By using the tool, you agree to these terms.</p>
+
+      <h3>2. Description of service</h3>
+      <p>DateiCleaner is a browser-based tool for removing unwanted text patterns from file names. All processing steps (renaming, ZIP creation) take place exclusively locally in the user's browser. No files are uploaded to a server.</p>
+
+      <h3>3. Free use</h3>
+      <p>The tool is provided free of charge. There is no entitlement to continuous availability, error-free operation, or further development.</p>
+
+      <h3>4. Requirements for use</h3>
+      <p>Use is at your own responsibility. Users are themselves responsible for ensuring that the files they process do not infringe the rights of third parties and that they are authorized to process these files.</p>
+
+      <h3>5. Limitation of liability</h3>
+      <p>Use of the tool is at your own risk. No liability is assumed for:</p>
+      <ul>
+        <li>Data loss or damage to files during processing</li>
+        <li>Incorrect or incomplete renaming</li>
+        <li>Damages arising from the use or unavailability of the tool</li>
+      </ul>
+      <p>This does not apply in cases of intent or gross negligence.</p>
+
+      <h3>6. No data storage</h3>
+      <p>Since processing takes place entirely client-side in the browser, no uploaded files or their contents are stored, viewed, or shared by the operator.</p>
+
+      <h3>7. Changes</h3>
+      <p>The operator reserves the right to change these Terms of Service and the tool itself at any time without prior notice.</p>
+
+      <h3>8. Contact</h3>
+      <p>For questions regarding these Terms of Service:<br>
+      Email: <a href="mailto:marcel.worgotter@proton.me">marcel.worgotter@proton.me</a><br>
+      Discord: <a href="https://discord.gg/5RqSyuZbDq" target="_blank" rel="noopener">discord.gg/5RqSyuZbDq</a></p>
+
+      <h3>9. Governing law</h3>
+      <p>German law applies, unless mandatory consumer protection provisions of the user's country of residence state otherwise.</p>
+    </div>
+  </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
@@ -482,9 +829,55 @@
   let caseSensitive = false;
   let files = [];
   let patterns = [];
+  let currentLang = 'de';
+
+  const i18n = {
+    de: {
+      downloadBtnDefault: '⬇ Als ZIP herunterladen',
+      downloadBtnLoading: '⏳ Wird erstellt…',
+      removeTitle: 'Entfernen',
+      zipError: 'Fehler beim Erstellen der ZIP-Datei: '
+    },
+    en: {
+      downloadBtnDefault: '⬇ Download as ZIP',
+      downloadBtnLoading: '⏳ Creating…',
+      removeTitle: 'Remove',
+      zipError: 'Error creating the ZIP file: '
+    }
+  };
 
   const patternInput = document.getElementById('patternInput');
   patternInput.addEventListener('keydown', e => { if (e.key === 'Enter') addPattern(); });
+
+  function toggleLang() {
+    currentLang = currentLang === 'de' ? 'en' : 'de';
+    applyLang();
+  }
+
+  function applyLang() {
+    document.body.classList.toggle('lang-de', currentLang === 'de');
+    document.body.classList.toggle('lang-en', currentLang === 'en');
+    document.documentElement.lang = currentLang;
+    document.getElementById('langToggle').classList.toggle('on', currentLang === 'en');
+    document.getElementById('langLabelDe').classList.toggle('active', currentLang === 'de');
+    document.getElementById('langLabelEn').classList.toggle('active', currentLang === 'en');
+    patternInput.placeholder = currentLang === 'de'
+      ? patternInput.dataset.placeholderDe
+      : patternInput.dataset.placeholderEn;
+    updatePreview();
+  }
+
+  function openModal(id) {
+    document.getElementById(id).classList.add('open');
+  }
+
+  function closeModal(id) {
+    document.getElementById(id).classList.remove('open');
+  }
+
+  function closeModalOnOverlay(e, id) {
+    if (e.target.id === id) closeModal(id);
+  }
 
   function addPattern() {
     const val = patternInput.value.trim();
@@ -602,6 +995,7 @@
     card.style.display = 'block';
 
     let changed = 0;
+    const t = i18n[currentLang];
     const rows = files.map((f, i) => {
       const newName = cleanName(f.name);
       const isChanged = newName !== f.name;
@@ -611,7 +1005,7 @@
           <span class="file-old" title="${escHtml(f.name)}">${escHtml(f.name)}</span>
           <span class="file-arrow">→</span>
           <span class="file-new ${isChanged ? 'changed' : 'unchanged'}" title="${escHtml(newName)}">${escHtml(newName)}</span>
-          <button class="remove-btn" onclick="removeFile(${i})" title="Entfernen">×</button>
+          <button class="remove-btn" onclick="removeFile(${i})" title="${t.removeTitle}">×</button>
         </div>`;
     });
 
@@ -624,8 +1018,9 @@
   async function downloadZip() {
     if (files.length === 0) return;
     const btn = document.getElementById('downloadBtn');
+    const t = i18n[currentLang];
     btn.disabled = true;
-    btn.textContent = '⏳ Wird erstellt…';
+    btn.textContent = t.downloadBtnLoading;
 
     try {
       const zip = new JSZip();
@@ -642,14 +1037,16 @@
       a.click();
       URL.revokeObjectURL(url);
     } catch(e) {
-      alert('Fehler beim Erstellen der ZIP-Datei: ' + e.message);
+      alert(t.zipError + e.message);
     }
 
     btn.disabled = false;
-    btn.textContent = '⬇ Als ZIP herunterladen';
+    btn.innerHTML = '⬇ <span data-lang="de">Als ZIP herunterladen</span><span data-lang="en">Download as ZIP</span>';
+    applyLang();
   }
 
   renderTags();
+  applyLang();
 </script>
 
 </body>
