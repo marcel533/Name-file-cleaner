@@ -12,5 +12,6 @@
 Dieses README sowie das CSS des Tools wurden vollständig mit KI generiert.
 
 This README file and the tool's CSS were generated entirely using AI.
+
 --
 URL: https://marcel533.github.io/Name-file-cleaner/
