@@ -1,5 +1,5 @@
-8# DateiCleaner
-
+# DateiCleaner
+---
 🇩🇪 Deutsche DokumentationÜberblickName-file-cleaner ist ein leichtgewichtiges Skript, das die mühsame Aufgabe des Umbenennens großer Dateimengen automatisiert. Es hilft dabei, Sonderzeichen zu entfernen, Leerzeichen durch Unterstriche oder Bindestriche zu ersetzen, Groß-/Kleinschreibung anzupassen und unnötige Präfixe oder Suffixe zu entfernen.
 
 FunktionenMassenumbenennung: Verarbeiten Sie gesamte Verzeichnisse auf einmal.Zeichenbereinigung: Entfernen oder Ersetzen von illegalen/Sonderzeichen (z. B. ?, *, |, :).Formatierungsoptionen:Umwandlung in Klein-/Großbuchstaben.Ersetzen von Leerzeichen durch _ oder -.Entfernen von doppelten Leerzeichen.Vorschau-Modus: Sehen Sie sich die Änderungen an, bevor sie angewendet werden.Rückgängig-Funktion: Erstellt eine Protokolldatei, um Änderungen bei Bedarf rückgängig zu machen.
