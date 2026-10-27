@@ -37,14 +37,19 @@ Name File Cleaner is a lightweight, browser-based tool that automates renaming l
 
 > 🔒 **Your data stays on your device.** This tool runs entirely in your browser. No server-side processing means no logs and no tracking.
 
+### AI Generation Note
+
+the **complete CSS styling** was fully generated with AI. all visual designs, dark theme came from AI-supported generation.
+
+
 ### Technical Details
 
 | Component | Technology |
 |-----------|------------|
-| Frontend | Vanilla JavaScript |
-| Styling | CSS (dark theme) |
+| Frontend | Vanilla JavaScript (hand-written) |
+| Styling | CSS (AI-generated) |
+| Documentation | Markdown (AI-generated) |
 | Hosting | GitHub Pages |
-| AI Note | This README and CSS were generated entirely using AI |
 
 ### Getting Started
 
@@ -77,23 +82,28 @@ DateiCleaner ist ein leichtgewichtiges, browserbasiertes Tool, das die Umbenennu
 1. **Eingabe** — Dateinamen einfügen (eine pro Zeile) oder `.txt` hochladen
 2. **Konfigurieren** — Bereinigungs-Optionen wählen
 3. **Vorschau** — Vorher/Nachher prüfen
-4. **Exportieren** — In Zwischenablage kopieren oder als `.csv` herunterladen
+4. **Exportieren** — In Zwischenablage kopieren oder als `.css` herunterladen
 
 ### Datenschutz
 
 > 🔒 **Deine Daten bleiben auf deinem Gerät.** Das Tool läuft vollständig im Browser. Keine serverseitige Verarbeitung bedeutet keine Logs und kein Tracking.
 
+### KI-Erstellungs-Hinweis
+
+das **komplette CSS-Styling** wurden vollständig mit KI generiert. alle visuellen Designs, Dark-Theme kam aus KI-unterstützter Generierung.
+
+
 ### Technische Details
 
 | Komponente | Technologie |
 |------------|-------------|
-| Frontend | Vanilla JavaScript |
-| Styling | CSS (Dark Theme) |
+| Frontend | Vanilla JavaScript (handschriftlich) |
+| Styling | CSS (KI-generiert) |
+| Dokumentation | Markdown (KI-generiert) |
 | Hosting | GitHub Pages |
-| KI-Hinweis | Dieses README und das CSS wurden vollständig mit KI generiert |
 
 ### Erste Schritte
 
-1. Online testen unter [Live-app](https://marcel533.github.io/Name-file-cleaner/)
+1. Online testen unter [Live-App](https://marcel533.github.io/Name-file-cleaner/)
 
 Erstellt von **marcel533**.
