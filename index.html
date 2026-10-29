@@ -2,8 +2,10 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
+<meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="https://fonts.bunny.net/css?family=orbitron:wght@400;900|inter:wght@400;700" rel="stylesheet" />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20512%20512%22%3E%0A%3Crect%20x%3D%228%22%20y%3D%228%22%20width%3D%22496%22%20height%3D%22496%22%20rx%3D%22104%22%20fill%3D%22%2317181A%22%20stroke%3D%22%232E2F33%22%20stroke-width%3D%228%22/%3E%0A%3Cg%20fill%3D%22none%22%20stroke%3D%22%23C8F560%22%20stroke-width%3D%2222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M164%2092%20H282%20L364%20174%20V396%20a32%2032%200%200%201%20-32%2032%20H164%20a32%2032%200%200%201%20-32%20-32%20V124%20a32%2032%200%200%201%2032%20-32%20Z%22/%3E%3Cpath%20d%3D%22M282%2092%20V174%20H364%22/%3E%3Cpath%20d%3D%22M176%20232%20H300%22/%3E%3Cpath%20d%3D%22M176%20288%20H256%22/%3E%3Cpath%20d%3D%22M176%20344%20H208%22/%3E%3C/g%3E%0A%3Cg%20transform%3D%22translate%28336%20356%29%20rotate%28-38%29%22%3E%3Crect%20x%3D%22-80%22%20y%3D%22-42%22%20width%3D%22160%22%20height%3D%2284%22%20rx%3D%2222%22%20fill%3D%22%2317181A%22/%3E%3Crect%20x%3D%22-66%22%20y%3D%22-28%22%20width%3D%22132%22%20height%3D%2256%22%20rx%3D%2212%22%20fill%3D%22%237EFFF4%22/%3E%3Crect%20x%3D%228%22%20y%3D%22-28%22%20width%3D%2258%22%20height%3D%2256%22%20rx%3D%2212%22%20fill%3D%22%233FCFC2%22/%3E%3Crect%20x%3D%228%22%20y%3D%22-28%22%20width%3D%2228%22%20height%3D%2256%22%20fill%3D%22%233FCFC2%22/%3E%3C/g%3E%0A%3C/svg%3E" />
 <title>Dateinamen Cleaner</title>
 
 <style>
@@ -11,6 +13,7 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
+    color-scheme: dark;
     --bg: #0e0e0f;
     --surface: #17181a;
     --surface2: #1f2023;
@@ -44,7 +47,7 @@
   .logo-mark {
     width: 48px;
     height: 48px;
-    background: var(--accent);
+    background: transparent;
     border-radius: 10px;
     display: flex;
     align-items: center;
@@ -52,7 +55,7 @@
     flex-shrink: 0;
   }
 
-  .logo-mark svg { width: 26px; height: 26px; }
+  .logo-mark svg { width: 48px; height: 48px; display: block; }
 
   h1 {
     font-size: 2rem;
@@ -524,12 +527,11 @@
 
 <header>
   <div class="logo-mark">
-    <svg viewBox="0 0 24 24" fill="none" stroke="#0e0e0f" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-      <polyline points="14,2 14,8 20,8"/>
-      <line x1="9" y1="12" x2="15" y2="12"/>
-      <line x1="9" y1="16" x2="13" y2="16"/>
-    </svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+<rect x="8" y="8" width="496" height="496" rx="104" fill="#17181A" stroke="#2E2F33" stroke-width="8"/>
+<g fill="none" stroke="#C8F560" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"><path d="M164 92 H282 L364 174 V396 a32 32 0 0 1 -32 32 H164 a32 32 0 0 1 -32 -32 V124 a32 32 0 0 1 32 -32 Z"/><path d="M282 92 V174 H364"/><path d="M176 232 H300"/><path d="M176 288 H256"/><path d="M176 344 H208"/></g>
+<g transform="translate(336 356) rotate(-38)"><rect x="-80" y="-42" width="160" height="84" rx="22" fill="#17181A"/><rect x="-66" y="-28" width="132" height="56" rx="12" fill="#7EFFF4"/><rect x="8" y="-28" width="58" height="56" rx="12" fill="#3FCFC2"/><rect x="8" y="-28" width="28" height="56" fill="#3FCFC2"/></g>
+</svg>
   </div>
   <div>
     <h1>Datei<span>Cleaner</span></h1>
@@ -1028,4 +1030,4 @@
 </script>
 
 </body>
-</html>
+ </html>
